@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => '{locale?}', 'where' => ['locale' => implode('|', config('app.locales'))], 'middleware' => 'set_locale'], function () {
+    Route::get('/update', [HomeController::class, 'update']);
+    Route::get('/promotion', [HomeController::class, 'promotion']);
+    Route::get('/about', [HomeController::class, 'about']);
 });
+
+Route::get('/update', [HomeController::class, 'update']);
+Route::get('/promotion', [HomeController::class, 'promotion']);
+Route::get('/about', [HomeController::class, 'about']);
